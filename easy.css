@@ -8604,6 +8604,7 @@ div[id^="reader-helper"] {
     margin-left: 0;
     margin-right: 30px;
     padding: 0 5px;
+    float: left;
 }
 
 .page-dataset-entities-image .tab-control .entity-tab[data-v-59643587] .s-tab.active {
