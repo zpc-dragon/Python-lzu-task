@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from home.views import home
+from home.views import home, upload_files, login, usr, submit_creat_dataset
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", home, name="home"),
+    path("", login, name="login"),
+    path("home/", home, name="home"),
+    path('add/', upload_files, name='add'),
+    path("usr/<str:token>", usr, name="usr"),
+    path('submit_creat_dataset/', submit_creat_dataset,
+         name='submit_creat_dataset'),
 ]

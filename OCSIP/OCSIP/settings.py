@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-ye+x874_!^z3+#x*r^j(ruubz%a*120&7im0fv5x6^^jhh_ke0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "home"
+    "home",
 ]
 
 MIDDLEWARE = [
@@ -118,8 +118,10 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), 
+                    os.path.join(BASE_DIR,'PY')]
 
+IMG_UPLOAD = os.path.join(BASE_DIR, 'static/uploads')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
