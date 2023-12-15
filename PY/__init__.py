@@ -101,7 +101,6 @@ def get_datasets(token: str) -> Dict[str, Dict[str, int | str]]:
     - updated_time
     {id: {name: str, created_time: int, updated_time: int}}
     """
-    print(token2account)
     account = token2account[token]
     data = _load_json(f"data/datasets/{account}.json")
     return data
