@@ -49,8 +49,9 @@ else:
     providers = ["CPUExecutionProvider"]
 models = [
     ort.InferenceSession(i, providers=providers)
-    for i in glob.glob("models/onnx/*.onnx")
+    for i in glob.glob("static/models/onnx/*.onnx")
 ]
+
 labels = ["CC", "EC", "HGSC", "LGSC", "MC"]
 
 
@@ -74,6 +75,7 @@ def predict(img):
     preds = [model.run(None, {"input.1": img})[0] for model in models]
     preds = Counter([i.argmax() for i in preds])
     preds = labels[preds.most_common(1)[0][0]]
+    # print(preds.most_common(1))
     return preds
 
 def _load_json(path: str) -> Optional[Dict[str, Any]]:
@@ -158,6 +160,7 @@ def get_datasets(token: str) -> Dict[str, Dict[str, int | str]]:
     {id: {name: str, created_time: int, updated_time: int}}
     """
     account = token2account[token]
+    print(token2account[token])
     data = _load_json(f"static/data/datasets/{account}.json")
     return data
 
