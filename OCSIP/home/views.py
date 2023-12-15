@@ -17,6 +17,7 @@ def usr(request, token):
     print(token)
     return render(request, 'usr.html', {'token': token, 'datasets': get_datasets(token)})
 
+
 def django_creat_dataset(request):
     if request.method == 'POST':
         # 获取提交的数据
@@ -69,7 +70,8 @@ def django_login(request):
         return render(request, 'login.html')
 
 
-def django_upload_data(request):  # 参考（django）01 django实现前端上传图片到后端保存_django保存图片-CSDN博客.pdf
+# 参考（django）01 django实现前端上传图片到后端保存_django保存图片-CSDN博客.pdf
+def django_upload_data(request):
     # 由前端指定的name获取到图片数据
     global token
     global dataset_id
@@ -98,15 +100,17 @@ def django_upload_data(request):  # 参考（django）01 django实现前端上�
     # messages.SUCCESS(request,'success')
     return HttpResponseRedirect(reverse('home'))
 
+
 def django_delete_dataset(request):
     if request == 'post':
         global token
         dataset_id = request.POST.get('dataset_id')
-        if delete_dataset(token,dataset_id):
+        if delete_dataset(token, dataset_id):
             HttpResponse('success')
         else:
             HttpResponse('failue')
     pass
+
 
 def django_rename_dataset(request):
     global token
