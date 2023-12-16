@@ -1,20 +1,24 @@
+from django.urls import reverse
+from django.contrib import messages
 from django.shortcuts import render, redirect
 import os
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from home.forms import LoginForm
 from django.contrib import auth
-from PY import upload_data, predict, get_dataset, get_datasets, creat_dataset
+from PY import upload_data, get_dataset, get_datasets, creat_dataset, delete_dataset, rename_dataset, delete_data
 from PY import login as py_login
 # Create your views here.
 token = ''
+dataset_id = ''
 
 
 def usr(request, token):
+    print(token)
     return render(request, 'usr.html', {'token': token, 'datasets': get_datasets(token)})
 
 
-def submit_creat_dataset(request):
+def django_creat_dataset(request):
     if request.method == 'POST':
         # 获取提交的数据
         global token
@@ -29,28 +33,26 @@ def submit_creat_dataset(request):
     # 如果是 GET 请求，可以根据实际需求返回一个页面或其他响应
     return HttpResponse('Invalid request method')
 
-from django.urls import reverse
 
 def home(request):
-    print('home')
+    global dataset_id
     if request.method == "POST":
-        print("post")
         dataset_id = request.POST.get('dataset_id')
         dataset_name = get_datasets(token)[dataset_id]['name']
         print(dataset_name)
         return redirect(reverse('home'))
     else:
-        print('get')
-        return render(request, 'home.html')
+        return render(request, 'home.html', {'dataset': get_dataset(token, dataset_id)})
 
 
-def login(request):
+def django_login(request):
+    global token
     if request.method == "POST":
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
             cd = login_form.cleaned_data
             # print(login_form)
-            global token
+            print(cd["username"], cd['password'])
             token = py_login(cd['username'], cd['password'])
             # user = auth.authenticate(username=cd['username'],password=cd['password'])
             # if user:
@@ -59,7 +61,6 @@ def login(request):
             #         配合使用'''
             #     login(request,user)
             # return HttpResponse('成功登录')
-            print(cd["username"], cd['password'])
             return redirect('usr', token=token)
             # else:
             #     return HttpResponse('登录失败')
@@ -69,26 +70,67 @@ def login(request):
         return render(request, 'login.html')
 
 
-def upload_files(request):  # 参考（django）01 django实现前端上传图片到后端保存_django保存图片-CSDN博客.pdf
+# 参考（django）01 django实现前端上传图片到后端保存_django保存图片-CSDN博客.pdf
+def django_upload_data(request):
     # 由前端指定的name获取到图片数据
+    global token
+    global dataset_id
     img = request.FILES.get('img')
     # 获取图片的全文件名
     img_name = img.name
-    token = img.token
-    dataset_id = img.dataset_id
     # 截取文件后缀和文件名
     mobile = os.path.splitext(img_name)[0]
     ext = os.path.splitext(img_name)[1]
     # 重定义文件名
-    img_name = f'avatar-{mobile}{ext}'
+    img_name = f'{mobile}{ext}'
+    print(img_name)
     # 从配置文件中载入图片保存路径
-    img_path = os.path.join(settings.IMG_UPLOAD, img_name)
+    img_path = os.path.join(os.getcwd(), img_name)
+    print(img_path)
     # 写入文件
     with open(img_path, 'ab') as fp:
         # 如果上传的图片非常大，就通过chunks()方法分割成多个片段来上传
         for chunk in img.chunks():
             fp.write(chunk)
-    upload_data(token, dataset_id, [(img_name, img.read())])
-    # # 上传到AI库里立即perdict？
-    # preds = predict(img_path)
-    return HttpResponse('success')
+        # fp.write(img.read())
+    # 上传到AI库里
+    with open(img_path, "rb") as f:
+        data = f.read()
+    upload_data(token, dataset_id, [(img_name, data)])
+    # messages.SUCCESS(request,'success')
+    return HttpResponseRedirect(reverse('home'))
+
+
+def django_delete_dataset(request):
+    if request == 'post':
+        global token
+        dataset_id = request.POST.get('dataset_id')
+        if delete_dataset(token, dataset_id):
+            HttpResponse('success')
+        else:
+            HttpResponse('failue')
+    pass
+
+
+def django_rename_dataset(request):
+    global token
+    if request.method == 'POST':
+        dataset_id = request.POST.get('dataset_id')
+        new_name = request.POST.get('new_name')
+        if rename_dataset(token, dataset_id, new_name):
+            HttpResponse('success')
+        else:
+            HttpResponse('failue')
+    pass
+
+
+def django_delete_data(request):
+    global token
+    if request.method == 'POST':
+        dataset_id = request.POST.get('dataset_id')
+        data_id = request.POST.get('data_id')
+        if delete_data(token, dataset_id, data_id):
+            HttpResponse('success')
+        else:
+            HttpResponse('failue')
+    pass
