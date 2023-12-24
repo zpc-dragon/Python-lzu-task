@@ -12,34 +12,43 @@
 
 对于前端的主要界面和操作逻辑在此处说明
 
-> 队长之前说做三个页面，一个是登陆（最好有账密），然后是登陆进去的项目列表，里面可以新建删除项目，然后每个项目都进去就是类似如下的页面
+> 做三个页面，一个是登陆，然后是登陆进去的项目列表，里面可以新建和删除项目，最后每个项目数据集的页面大致如下
 >
 > ![d4ee5e18b7c83bcc23c3b1c74094168a](https://typora-zpc.oss-cn-beijing.aliyuncs.com/202312111528845.png)
 
-根据老师上课的要求，前台的登录界面可以暂时不设计，后台和前台的交互比较重要
+根据老师上课的要求，界面要求不高，主要是后台和前台的交互比较重要
 
 ## 开发流程
 
-- 负责后端的同学暂时拿不到前端的完整代码请见谅，可以先想想通过上述点击需要哪些函数，或是展示哪些数据，这整个的流程要清楚（12.11）
+- 后端明确通过点击需要哪些函数，或是展示哪些数据（12.11）
 - 已完成对主界面的实现（12.12）
-- 对主界面进行微调
-- 完善标签的增删改查
+- 对主界面进行微调（12.23）
+- 完善标签的增删改查(12.21)
+
+## 实际效果
+
+- 登录界面
+
+![image-20231224131325084](https://typora-zpc.oss-cn-beijing.aliyuncs.com/image-20231224131325084.png)
+
+- 用户管理界面
+
+![image-20231224131244752](https://typora-zpc.oss-cn-beijing.aliyuncs.com/image-20231224131244752.png)
+
+- 数据集详情页
+
+![image-20231224131219653](https://typora-zpc.oss-cn-beijing.aliyuncs.com/image-20231224131219653.png)
 
 ## 其他
 
-目前主页设计的过程中，有一些细节上的问题，需要队友协商沟通
+1. return 帐户密码错误的提示 √
+2. 数据集的展示（用户 get_datasets数据格式）dataset的删除和重命名的两个标签 √
+3. open_dataset函数的对应关系√
+4. get_dataset拿到数据集内所有的图片信息并显示√
+5. home做一下删除和部分图片展示√
+6. 四周控件布局的调整√
 
-![image-20231211165223759](https://typora-zpc.oss-cn-beijing.aliyuncs.com/202312111652253.png)
+相关仓库：https://github.com/LZUCSWang/OCSIP/tree/main
 
-https://ai.baidu.com/easydl/app/dataset/objdct/list
+注：后期的代码开发均在相关仓库完成，此仓库不再更新维护
 
-![image-20231211165539833](https://typora-zpc.oss-cn-beijing.aliyuncs.com/202312111655976.png)
-
-如果有其他问题，可以在这里直接留言或者群聊讨论。
-
-1. return 帐户密码错误的提示
-2. 数据集的展示（用户 get_datasets数据格式）dataset的删除和重命名的两个标签
-3. opendataset函数的对应关系
-4. get_dataset拿到数据集内所有的图片信息
-5. home做一下删除和部分图片展示
-6. 几个下拉菜单
